@@ -2,6 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include "Cadastro.h"
@@ -29,6 +30,7 @@ int add_or_edit_participante();
 int add_or_edit_pokemon();
 
 void salvar(std::vector<TAD1>&);
+void load1(std::vector<TAD1>&);
 
 int main() {
 	setlocale(LC_ALL, "Portuguese");
@@ -165,14 +167,19 @@ int main() {
 					}
 					else {
 						system("CLS");
+					
 					}
 		
 				}
 		case 5:
 			salvar(lista_participantes);
 				break;
-			
+		case 6:
+			load1(lista_participantes);
+			break;
 		}
+		
+
 	} while (op != 0);
 	}
 
@@ -257,9 +264,7 @@ void add_pokemon(std::vector<TAD1>& lista_participantes, int index , int index_e
 			std::cout << "\n";
 			TAD3 pokemon(nome_pokemon);
 			pokemon.SetPokemon(nome_pokemon);
-			//tad2.ListaPokemon(pokemon);
 			lista_participantes[index].GetListaElemento()[index_element].PegaPokemon().push_back(pokemon);
-			//lista_participantes[index].GetListaElemento()[index_element].SetListaPokemon(lista_pokemon);
 		}
 		else {
 			std::cout << "Nome do Pokemon muito grande para os nossos registros." <<"\n";
@@ -408,26 +413,95 @@ int add_or_edit_participante() {
 	return ed;
 
 }	
+
+//struct pokemon {
+//	char nome[10];
+//};
+//
+//struct elemento {
+//	char nome[50];
+//	pokemon pokemons[50];
+//};
+//
+//
+//struct competidor {
+//	char nome[50];
+//	elemento elementos[30];
+//};
+
 void salvar(std::vector<TAD1>& lista_participantes) {
 	int i;
 
-	int len_vet = sizeof(lista_participantes) - 1; // tamanho do vetor
-
-	FILE* arq;
+	int len_vet = lista_participantes.size(); // tamanho do vetor
+	std::ifstream in;
+	std::ofstream out1;
+	std::ofstream out2;
+	std::ofstream out3;
+	std::string arquivo;
+	
 	// abre o arquivo para escrita no modo append (adiciona ao final)
-	arq = fopen("dados.bin", "ab");
-	if (arq != NULL)
-	{
-		for (i = 0; i < len_vet; i++)
-			// escreve cada elemento do vetor no arquivo
-			fwrite(&lista_participantes[i], sizeof(TAD1), 1, arq);
-		fclose(arq); // aborta o programa
+	/*FILE* arq = fopen("dados.txt", "wb");
+	fwrite((const char*)&competidores, sizeof(competidores), 1, arq);*/
+	out1.open("Competidor.txt");
+	out2.open("Elemento.txt");
+	out3.open("Pokemon.txt");
+	out1 << len_vet << std::endl;
+	for (int i = 0; i < len_vet; i++) {
+		out1 << i << "|"<< lista_participantes[i].GetName() << std::endl;
+		out2 << lista_participantes[i].GetListaElemento().size() << std::endl;
+		for (size_t j = 0; j < lista_participantes[i].GetListaElemento().size(); j++) {
+			out2 << i << lista_participantes[i].GetListaElemento()[j].GetElemento() << std::endl;
+			out3 << lista_participantes[i].GetListaElemento()[j].PegaPokemon().size() << std::endl;
+			for (size_t k = 0; k < lista_participantes[i].GetListaElemento()[j].PegaPokemon().size(); k++) {
+				out3 << i << lista_participantes[i].GetListaElemento()[j].PegaPokemon()[k].GetPokemon() << std::endl;
+			}
+		}
 	}
-	else
-	{
-		printf("\nErro ao abrir o arquivo para leitura!\n");
-		exit(1); // aborta o programa
-	}
+	out1.close();
+	out2.close();
+	out3.close();
+	
 
+	
 }
-
+void load1(std::vector<TAD1>& lista_participantes) {
+	std::ifstream in("Competidor.txt");
+	std::ofstream out;
+	std::string arquivo1, arquivo2, arquivo3;
+	int tamc, tame, tamp;
+	//FILE* file;
+	//file = fopen("Competidor.txt", "r");
+	//fscanf(file, "&d", &tamc);
+	std::string tam_line;
+	std::getline(in, tam_line);
+	tamc = atoi(tam_line.c_str());
+	for (int i = 0; i < tamc; i++) {
+		std::string index;
+		std::getline(in, index, '|');
+		std::string competidor;
+		std::getline(in, competidor);
+		lista_participantes.push_back(competidor);
+	}
+	/*std::string line;
+	while (std::getline(in, line)) {
+		line.substr
+		lista_participantes[i].SetName(arquivo1);
+	}
+	
+	in >> arquivo1;
+	lista_participantes[i].SetName(arquivo1);
+	}
+	in.close();
+	in.open("Elemento.txt", std::ios::app);
+	in >> arquivo2;
+	lista_participantes[0].GetListaElemento().push_back(arquivo2);
+	in.close();
+	in.open("Pokemon.txt", std::ios::app);
+	in >> arquivo3;
+	lista_participantes[0].GetListaElemento()[0].PegaPokemon().push_back(arquivo3);
+	in.close();*/
+}
+//	competidor competidores[50];
+//in.read((char*)&competidores, sizeof(competidores));
+//	strcpy(competidores[i].nome, lista_participantes[i].GetName().c_str());
+//out.write((const char*)&competidores, sizeof(competidores));
