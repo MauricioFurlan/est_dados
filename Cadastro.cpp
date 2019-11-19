@@ -3,80 +3,70 @@
 #define _CRT_SECURE_NO_DEPRECATE
 #include "Cadastro.h"
 
-TAD1::TAD1() {
+Tad1::Tad1() {}
 
+Tad1::Tad1(std::string name) {
+  new_name_ = name;
 }
-TAD1::TAD1(std::string nome) {
-	novo_nome_ = nome;
+Tad1::~Tad1() {}
+std::string Tad1::GetName() const {
+  return new_name_;
 }
-TAD1::~TAD1() {
-
-}
-std::string TAD1::GetName() const {
-	return novo_nome_;
-}
-void TAD1::SetName(std::string nome) {
-	novo_nome_ = nome;
+void Tad1::SetName(std::string name) {
+  new_name_ = name;
 }
 
-std::vector<TAD2>& TAD1::GetListaElemento() {
-	return lista_elemento_;
+std::vector<Tad2>& Tad1::GetListElement() {
+  return list_element_;
 }
 
-void TAD1::SetListaElemento(std::vector<TAD2>& elemento) {
-	lista_elemento_ = elemento;
+void Tad1::SetListElemenet(std::vector<Tad2>& element) {
+  list_element_ = element;
 }
 
+Tad2::Tad2() {}
 
-
-TAD2::TAD2()  {
-	
-}
-TAD2::TAD2(std::string elemento) {
-	poke_elemento_ = elemento;
-}
-TAD2::~TAD2() {
-
-}
-std::string TAD2::GetElemento()  {
-	return poke_elemento_;
+Tad2::Tad2(std::string element) {
+  poke_element_ = element;
 }
 
-void TAD2::SetElemento(std::string elemento){
-	poke_elemento_ = elemento;
+Tad2::~Tad2() {}
+std::string Tad2::GetElement()  {
+  return poke_element_;
 }
 
-std::vector<TAD3>& TAD2::PegaPokemon()
-{
-	return lista_pokemon_;
+void Tad2::SetElement(std::string element){
+  poke_element_ = element;
 }
 
-void TAD2::SetListaPokemon(std::vector<TAD3>&pokemon) {
-	lista_pokemon_ = pokemon;
+std::vector<Tad3>& Tad2::GetListPokemon(){
+  return list_pokemon_;
 }
 
-void TAD2::ListaPokemon(TAD3 pokemon){
-	lista_pokemon_.push_back(pokemon);
+void Tad2::SetListPokemon(std::vector<Tad3>&pokemon) {
+  list_pokemon_ = pokemon;
 }
 
-std::string TAD2::BuscarPokemon(int index) {
-	return lista_pokemon_[index].GetPokemon();
+void Tad2::ListPokemon(Tad3 pokemon){
+  list_pokemon_.push_back(pokemon);
 }
 
-
-TAD3::TAD3() {
-
-}
-TAD3::TAD3(std::string pokemon) {
-	novo_pokemon_ = pokemon;
-}
-TAD3::~TAD3() {
-
-}
-std::string& TAD3::GetPokemon()  {
-	return novo_pokemon_;
+std::string Tad2::SearchPokemon(int index) {
+  return list_pokemon_[index].GetPokemon();
 }
 
-void TAD3::SetPokemon(std::string& pokemon){
-	novo_pokemon_ = pokemon;
+Tad3::Tad3() {}
+
+Tad3::Tad3(std::string pokemon) {
+  new_pokemon_ = pokemon;
+}
+
+Tad3::~Tad3() {}
+
+std::string& Tad3::GetPokemon()  {
+  return new_pokemon_;
+}
+
+void Tad3::SetPokemon(std::string& pokemon){
+  new_pokemon_ = pokemon;
 }
