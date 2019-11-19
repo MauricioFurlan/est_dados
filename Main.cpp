@@ -2,9 +2,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <iostream>
-#include <fstream>
 #include <string>
-#include <vector>
+#include <vector>l
+#include <fstream>
 #include "Cadastro.h"
 
 
@@ -30,7 +30,8 @@ int add_or_edit_participante();
 int add_or_edit_pokemon();
 
 void salvar(std::vector<TAD1>&);
-void load1(std::vector<TAD1>&);
+void load(std::vector<TAD1>&);
+//void load();
 
 int main() {
 	setlocale(LC_ALL, "Portuguese");
@@ -65,7 +66,7 @@ int main() {
 			system("CLS");
 			add_pokemon(lista_participantes, index , index_element);
 			system("CLS");
-		
+
 			break;
 		case 2:
 			system("CLS");
@@ -81,13 +82,13 @@ int main() {
 			std::cout << "+------------------------------------------------------------------+" << "\n";
 			std::cout << "            Digite o Index do participante que deseja alterar: ";
 				std::cin >> participante;
-		
+
 				system("CLS");
 				printVector(lista_participantes);
 
 				menu_edit = menu_editar_question_ed_or_ed();
 				if (menu_edit == 1) {
-					system("CLS");
+				system("CLS");
 					printVector(lista_participantes);
 					edd_or_edit = add_or_edit_participante();
 					if (edd_or_edit == 1) {
@@ -108,7 +109,7 @@ int main() {
 					else {
 						system("CLS");
 					}
-					
+
 				}if (menu_edit == 2) {
 					edd_or_edit = add_or_edit_element();
 					if (edd_or_edit == 1) {
@@ -145,7 +146,7 @@ int main() {
 						add_pokemon(lista_participantes, participante, index_element);
 					}
 					if (edd_or_edit == 2) {
-						system("CLS");
+					system("CLS");
 						printVector(lista_participantes);
 						std::cout << "                                 Digite o index do elemento:";
 						std::cin >> index_element;
@@ -155,7 +156,7 @@ int main() {
 						editar_pokemon(lista_participantes, participante, index_element, index_poke);
 					}
 					if (edd_or_edit == 3) {
-					
+
 						printVector(lista_participantes);
 						std::cout << "                                 Digite o index do elemento:";
 						std::cin >> index_element;
@@ -167,19 +168,15 @@ int main() {
 					}
 					else {
 						system("CLS");
-					
 					}
-		
+
 				}
 		case 5:
 			salvar(lista_participantes);
 				break;
 		case 6:
-			load1(lista_participantes);
-			break;
+			load(lista_participantes);
 		}
-		
-
 	} while (op != 0);
 	}
 
@@ -209,7 +206,7 @@ void add_competidor(std::vector<TAD1>& lista_participantes) {
 			system("PAUSE");
 		}
 	}
-	
+
 
 	std::cout << "\n";
 }
@@ -264,21 +261,22 @@ void add_pokemon(std::vector<TAD1>& lista_participantes, int index , int index_e
 			std::cout << "\n";
 			TAD3 pokemon(nome_pokemon);
 			pokemon.SetPokemon(nome_pokemon);
+			//tad2.ListaPokemon(pokemon);
 			lista_participantes[index].GetListaElemento()[index_element].PegaPokemon().push_back(pokemon);
+			//lista_participantes[index].GetListaElemento()[index_element].SetListaPokemon(lista_pokemon);
 		}
 		else {
 			std::cout << "Nome do Pokemon muito grande para os nossos registros." <<"\n";
 			std::cout << "pokemon nao adicionado" << "\n";
 			system("PAUSE");
-		
+			
 		}
 
-		
 	}
 }
 void printVector( std::vector<TAD1>& lista_participantes) {
 	size_t size = lista_participantes.size();
-	
+
 	for (size_t i = 0; i < size; i++) {
 		std::cout << "\n";
 		std::cout << "|" << "Treinador:" << "[" <<i<< "]" << lista_participantes[i].GetName() << "\n";
@@ -412,96 +410,156 @@ int add_or_edit_participante() {
 	system("CLS");
 	return ed;
 
-}	
-
-//struct pokemon {
-//	char nome[10];
-//};
-//
-//struct elemento {
-//	char nome[50];
-//	pokemon pokemons[50];
-//};
-//
-//
-//struct competidor {
-//	char nome[50];
-//	elemento elementos[30];
-//};
-
+}
 void salvar(std::vector<TAD1>& lista_participantes) {
-	int i;
-
-	int len_vet = lista_participantes.size(); // tamanho do vetor
+	int len_elemento = 0;
+	int len_pokemon = 0;
+	int aff = 0;
+	int len_vet = lista_participantes.size();
+	for (int i = 0; i < len_vet; i++) {
+		aff++;
+		for (int j = 0; j < lista_participantes[i].GetListaElemento().size(); j++) {
+			len_elemento++;
+			for (int k = 0; k < lista_participantes[i].GetListaElemento()[j].PegaPokemon().size(); k++) {
+				len_pokemon++;
+			}
+		}
+	}
+	
 	std::ifstream in;
 	std::ofstream out1;
 	std::ofstream out2;
 	std::ofstream out3;
 	std::string arquivo;
+
 	
-	// abre o arquivo para escrita no modo append (adiciona ao final)
-	/*FILE* arq = fopen("dados.txt", "wb");
-	fwrite((const char*)&competidores, sizeof(competidores), 1, arq);*/
-	out1.open("Competidor.txt");
-	out2.open("Elemento.txt");
-	out3.open("Pokemon.txt");
+	out1.open("competidores.txt");
+	out2.open("elementos.txt");
+	out3.open("pokemon.txt");
 	out1 << len_vet << std::endl;
+	out2 << len_elemento << std::endl;
+	out3 << len_pokemon << std::endl;
 	for (int i = 0; i < len_vet; i++) {
-		out1 << i << "|"<< lista_participantes[i].GetName() << std::endl;
-		out2 << lista_participantes[i].GetListaElemento().size() << std::endl;
-		for (size_t j = 0; j < lista_participantes[i].GetListaElemento().size(); j++) {
-			out2 << i << lista_participantes[i].GetListaElemento()[j].GetElemento() << std::endl;
-			out3 << lista_participantes[i].GetListaElemento()[j].PegaPokemon().size() << std::endl;
-			for (size_t k = 0; k < lista_participantes[i].GetListaElemento()[j].PegaPokemon().size(); k++) {
-				out3 << i << lista_participantes[i].GetListaElemento()[j].PegaPokemon()[k].GetPokemon() << std::endl;
+		out1 << i << "|" << lista_participantes[i].GetName() << std::endl;
+		//out2 << lista_participantes[i].GetListaElemento().size() << std::endl;
+		for (int j = 0; j < lista_participantes[i].GetListaElemento().size(); j++) {
+			out2 << i << "|" << lista_participantes[i].GetListaElemento()[j].GetElemento() << std::endl;
+		//	out3 << lista_participantes[i].GetListaElemento()[j].PegaPokemon().size() << std::endl;
+			for (int k = 0; k < lista_participantes[i].GetListaElemento()[j].PegaPokemon().size(); k++) {
+				out3 << i << "|" << j << "|" << lista_participantes[i].GetListaElemento()[j].PegaPokemon()[k].GetPokemon() << std::endl;
 			}
 		}
 	}
 	out1.close();
 	out2.close();
 	out3.close();
-	
-
-	
 }
-void load1(std::vector<TAD1>& lista_participantes) {
-	std::ifstream in("Competidor.txt");
-	std::ofstream out;
-	std::string arquivo1, arquivo2, arquivo3;
+
+void load(std::vector<TAD1>& lista_participantes) {
+	std::ifstream in1("competidores.txt");
+	std::ifstream in2("elementos.txt");
+	std::ifstream in3("pokemon.txt");
 	int tamc, tame, tamp;
-	//FILE* file;
-	//file = fopen("Competidor.txt", "r");
-	//fscanf(file, "&d", &tamc);
-	std::string tam_line;
-	std::getline(in, tam_line);
+	std::string tam_line, tam_line_elemento, tam_line_pokemon;
+
+	std::getline(in3, tam_line_pokemon);
+	tamp = atoi(tam_line_pokemon.c_str());
+
+	std::getline(in2, tam_line_elemento);
+	tame = atoi(tam_line_elemento.c_str());
+
+	std::getline(in1, tam_line);
 	tamc = atoi(tam_line.c_str());
+
 	for (int i = 0; i < tamc; i++) {
 		std::string index;
-		std::getline(in, index, '|');
+		std::getline(in1, index, '|');
 		std::string competidor;
-		std::getline(in, competidor);
+		std::getline(in1, competidor);
 		lista_participantes.push_back(competidor);
+		for (int i = 0; i < tame ; i++) {
+			int id_competidor;
+			std::string index_competidor;
+			std::getline(in2, index_competidor, '|');
+			id_competidor = atoi(index_competidor.c_str());
+			std::string elemento;
+			std::getline(in2, elemento);
+			lista_participantes[id_competidor].GetListaElemento().push_back(elemento);
+			if (tamp != 0) {
+				for (int i = 0; i < tamp; i++) {
+					int id_competidor, id_elemento;
+					std::string index_competidor;
+					std::getline(in3, index_competidor, '|');
+					id_competidor = atoi(index_competidor.c_str());
+					std::string index_elemento;
+					std::getline(in3, index_elemento, '|');
+					id_elemento = atoi(index_elemento.c_str());
+					std::string pokemon;
+					std::getline(in3, pokemon);
+					TAD3 pokemon1(pokemon);
+					pokemon1.SetPokemon(pokemon);
+					lista_participantes[id_competidor].GetListaElemento()[id_elemento].PegaPokemon().push_back(pokemon1);
+				}
+			}
+		}
+
 	}
-	/*std::string line;
-	while (std::getline(in, line)) {
-		line.substr
-		lista_participantes[i].SetName(arquivo1);
-	}
+	in1.close();
+	in2.close();
+	in3.close();
 	
-	in >> arquivo1;
-	lista_participantes[i].SetName(arquivo1);
-	}
-	in.close();
-	in.open("Elemento.txt", std::ios::app);
-	in >> arquivo2;
-	lista_participantes[0].GetListaElemento().push_back(arquivo2);
-	in.close();
-	in.open("Pokemon.txt", std::ios::app);
-	in >> arquivo3;
-	lista_participantes[0].GetListaElemento()[0].PegaPokemon().push_back(arquivo3);
-	in.close();*/
 }
-//	competidor competidores[50];
-//in.read((char*)&competidores, sizeof(competidores));
-//	strcpy(competidores[i].nome, lista_participantes[i].GetName().c_str());
-//out.write((const char*)&competidores, sizeof(competidores));
+
+
+
+
+
+
+	//int i;
+
+	//int len_vet = lista_participantes.size();
+	//char vetor[100];
+	//FILE* arq;
+	//// abre o arquivo para escrita no modo append (adiciona ao final)
+	//arq = fopen("dados.bin", "wt");
+	//if (arq != NULL)
+	//{
+	//	for (i = 0; i < len_vet; i++)
+	//		// escreve cada elemento do vetor no arquivo
+	//		fwrite(&lista_participantes[i], sizeof(TAD1), 1, arq);
+	//	fclose(arq);
+	//}
+	//system("CLS");
+
+	//arq = fopen("dados.bin", "rb");
+	//while (!feof(arq)){ // to read file
+	//	// fucntion used to read the contents of file
+	//	fread(&vetor, sizeof(char), 100, arq);
+	//	std::cout << vetor;
+	//}
+	//else
+	//{
+	//	std::cout << "\nErro ao abrir o arquivo para leitura!" << "\n";
+	//	exit(1); // aborta o programa
+	//}
+//}
+//	std::vector<std::string> vetor;
+//	FILE* arq;
+//	arq = fopen("dados.txt", "wt");
+//	size_t size = lista_participantes.size();
+//	if (arq != NULL) {
+//		for (size_t i = 0; i < size; i++) {
+//			fwrite(&lista_participantes, sizeof(TAD1), 1, arq);
+//		}
+//		fclose(arq);
+//		system("CLS");
+//
+//		arq = fopen("dados.txt", "rt");
+//		if (arq != NULL) {
+//			fscanf(arq, "%s", &vetor);
+//			printf("%s", vetor);
+//		}
+//	}
+//}
+
+
